@@ -6,7 +6,7 @@
 
 
 
-#grid {
+.grid {
     display: grid;
     grid-template-columns: repeat(10, 40px);
     gap: 5px;
@@ -27,6 +27,23 @@
 }
 
 
+
+
+
+.grid-7x7 {
+    display: grid;
+    gap: 5px;
+    margin-top: 20px;
+    grid-template-columns: repeat(7, 40px);
+}
+
+
+.grid-9x9 {
+    display: grid;
+    gap: 5px;
+    margin-top: 20px;
+    grid-template-columns: repeat(9, 40px);
+}
 
 
 
