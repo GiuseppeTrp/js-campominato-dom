@@ -11,16 +11,16 @@ function generateGrid() {
     // Imposta la classe della griglia in base alla difficoltà selezionata e rimuove le altre classi della griglia
     if (selectElement.value === "extreme") {
         cellNumber = 49;
-        gridElement.classList.add("grid-7x7");
-        gridElement.classList.remove("grid-9x9", "grid");
+        gridElement.classList.add("grid-7x7"); // Imposta la classe per una griglia 7x7
+        gridElement.classList.remove("grid-9x9", "grid"); // Rimuove altre classi della griglia
     } else if (selectElement.value === "normal") {
         cellNumber = 81;
-        gridElement.classList.add("grid-9x9");
-        gridElement.classList.remove("grid-7x7", "grid");
+        gridElement.classList.add("grid-9x9"); // Imposta la classe per una griglia 9x9
+        gridElement.classList.remove("grid-7x7", "grid"); // Rimuove altre classi della griglia
     } else {
         cellNumber = 100;
-        gridElement.classList.add("grid");
-        gridElement.classList.remove("grid-9x9", "grid-7x7");
+        gridElement.classList.add("grid"); // Imposta la classe per una griglia normale (10x10)
+        gridElement.classList.remove("grid-9x9", "grid-7x7"); // Rimuove altre classi della griglia
     }
 
     // Resetta la griglia
@@ -28,24 +28,26 @@ function generateGrid() {
 
     // Itera per creare le celle della griglia
     for (let i = 0; i < cellNumber; i++) {
-        // Crea un nuovo elemento div
         const newElement = document.createElement("div");
-
-        // Aggiunge la classe "square" al div appena creato
-        newElement.classList.add("square");
-
-        // Aggiunge il numero casuale al div
-        newElement.textContent = randomNumbers(selectElement);
-
+        newElement.classList.add("square"); // Aggiunge la classe per ogni cella della griglia
+    
+        // Decide casualmente se questa cella deve contenere una bomba
+        if (Math.random() < 0.2) { // 20% di probabilità di inserire una bomba
+            newElement.innerHTML =  '<i id="bomb" class="fa fa-regular fa-bomb"></i>'; // Inserisce un'icona bomba
+        } else {
+            newElement.textContent = randomNumbers(selectElement); // Inserisce un numero casuale nella cella
+        }
+    
         // listener per colorare la cella al click dell'utente
         newElement.addEventListener("click", function() {
-            this.style.backgroundColor = "lightblue";
+            this.style.backgroundColor = "lightblue"; // Cambia il colore della cella al click
             console.log("Cella cliccata: " + this.textContent);
         });
-
+    
         // Aggiunge il div creato a #grid
         gridElement.appendChild(newElement);
     }
+    
 }
 
 // Funzione per generare numeri casuali in base alla difficoltà
