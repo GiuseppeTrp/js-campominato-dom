@@ -34,14 +34,28 @@ function generateGrid() {
         // Decide casualmente se questa cella deve contenere una bomba
         if (Math.random() < 0.2) { // 20% di probabilità di inserire una bomba
             newElement.innerHTML =  '<i id="bomb" class="fa fa-regular fa-bomb"></i>'; // Inserisce un'icona bomba
+           
         } else {
             newElement.textContent = randomNumbers(selectElement); // Inserisce un numero casuale nella cella
         }
     
         // listener per colorare la cella al click dell'utente
         newElement.addEventListener("click", function() {
-            this.style.backgroundColor = "lightblue"; // Cambia il colore della cella al click
-            console.log("Cella cliccata: " + this.textContent);
+            // Se questa cella contiene una bomba
+            if (this.querySelector(".fa-bomb")) {
+                // cambia il colore della cella in rosso
+                this.style.backgroundColor = "red";
+                
+                // elemento con id "result" e modifica il contenuto in "Hai perso!"
+                const resultElement = document.getElementById("result");
+                resultElement.innerHTML = "Hai perso!";
+            } else {
+                // Se non contiene una bomba, cambia il colore della cella in azzurro
+                this.style.backgroundColor = "lightblue";
+                
+                // Stampa un messaggio nella console indicando il numero della cella cliccata
+                console.log("Cella cliccata: " + this.textContent);
+            }
         });
     
         // Aggiunge il div creato a #grid
