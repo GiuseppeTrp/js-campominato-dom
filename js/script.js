@@ -1,27 +1,24 @@
-
-
 // Funzione per generare la griglia al click dell'utente
 function generateGrid() {
-   
+    // Mostra il contenuto della griglia quando viene generata
+    document.getElementById("grid-cont").style.display = "block";
 
     // Seleziona l'elemento con id "grid"
     const gridElement = document.querySelector("#grid");
     // Seleziona l'elemento con id "result"
     const resultElement = document.querySelector("#result");
 
-    // Seleziona l'elemento con id "difficulty"
-    const selectElement = document.querySelector("#difficulty");
-     
-     // tiene traccia del numero di celle sicure 
-     let safe;
+    // Pulisce il contenuto precedente del risultato
+    resultElement.innerHTML = "";
 
-    // Inizializza il conteggio delle celle sicure
-    safe = 0;
+    // Inizializza una variabile per tenere traccia delle celle sicure
+    let safe;
 
-    // Determina il numero di celle in base alla difficoltà selezionata
+    // Inizializza la variabile per il numero di celle in base alla difficoltà selezionata
     let cellNumber;
 
-    // Imposta la classe della griglia in base alla difficoltà selezionata e rimuove le altre classi della griglia
+    // Controlla la difficoltà selezionata e imposta il numero di celle e le classi CSS di conseguenza
+    const selectElement = document.querySelector("#difficulty");
     if (selectElement.value === "extreme") {
         cellNumber = 49;
         gridElement.classList.add("grid-7x7");
@@ -36,50 +33,50 @@ function generateGrid() {
         gridElement.classList.remove("grid-9x9", "grid-7x7");
     }
 
-    // Resetta la griglia
+    // Pulisce il contenuto precedente della griglia
     gridElement.innerHTML = "";
 
-    // Itera per creare le celle della griglia
+    // Inizializza la variabile di conteggio delle celle sicure
+    safe = cellNumber;
+
+    // Ciclo per creare e aggiungere le celle alla griglia
     for (let i = 0; i < cellNumber; i++) {
         const newElement = document.createElement("div");
         newElement.classList.add("square");
 
-        // Decide casualmente se questa cella deve contenere una bomba
-        if (Math.random() < 0.2) { // 20% di probabilità di inserire una bomba
-            newElement.innerHTML = '<i id="bomb" class="fa fa-regular fa-bomb"></i>';
-        } else {
-            newElement.textContent = randomNumbers(selectElement); // Inserisce un numero casuale nella cella
-            safe++; // Incrementa il conteggio delle celle sicure
-        }
-
-        // Aggiungi un event listener per gestire il click dell'utente
+        // Aggiunge un evento di click a ogni cella
         newElement.addEventListener("click", function() {
-            // Se questa cella contiene una bomba
-            if (this.querySelector(".fa-bomb")) {
-                // Cambia il colore della cella in rosso
+            // Genera casualmente se la cella è una bomba o meno
+            if (Math.random() < 0.2) { 
+                // Se è una bomba, imposta lo stile e il testo appropriato
                 this.style.backgroundColor = "red";
-                // Aggiorna il risultato
+                newElement.innerHTML = '<i id="bomb" class="fa fa-regular fa-bomb"></i>';
+                // Aggiorna il risultato e applica la classe "lose" per lo stile
                 document.getElementById("result").innerHTML = "Hai perso!";
                 resultElement.classList.add("lose");
             } else {
-                // Se non contiene una bomba, cambia il colore della cella in azzurro
+                // Se non è una bomba, imposta lo stile e aggiorna il conteggio delle celle sicure
                 this.style.backgroundColor = "lightblue";
-                safe--; // Decrementa il conteggio delle celle sicure
-                // Se tutte le celle sicure sono state cliccate
+                safe--; 
                 if (safe == 0) {
-                    // Aggiorna il risultato
+                    // Se tutte le celle sicure sono state scoperte, aggiorna il risultato e applica la classe "win" per lo stile
                     document.getElementById("result").innerHTML = "Hai vinto!";
                     resultElement.classList.add("win");
                 }
             }
+
+            // Se la cella non è una bomba, imposta il testo con un numero casuale
+            if (!this.querySelector(".fa-bomb")) {
+                this.textContent = randomNumbers(selectElement);
+            }
         });
 
-        // Aggiunge il div creato a #grid
+        // Aggiunge la nuova cella alla griglia
         gridElement.appendChild(newElement);
     }
 }
 
-// Funzione per generare numeri casuali in base alla difficoltà
+// Funzione per generare numeri casuali in base alla difficoltà selezionata
 function randomNumbers(selectElement) {
     if (selectElement.value === "extreme") {
         return Math.floor(Math.random() * 49) + 1;
@@ -90,5 +87,5 @@ function randomNumbers(selectElement) {
     }
 }
 
-// Event listener al pulsante #start che chiama la funzione generateGrid() al click dell utente
+// Aggiunge un evento di click al pulsante di avvio per generare la griglia
 document.getElementById("start").addEventListener("click", generateGrid);
